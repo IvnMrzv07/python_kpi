@@ -49,59 +49,80 @@ def iter_buble(lst, num_of_els, max_min):
 
     return res_l[-1]
 
+
+def find_el_by_pos_with_pivot(lst, pivot, el_pos):
+    left_l = []
+    right_l = []
+
+    for el in lst:
+        if el <= pivot:
+            left_l.append(el)
+        elif el > pivot:
+            right_l.append(el)
+    if len(left_l) + len(right_l) == len(lst):
+        left_l.pop(left_l.index(pivot))
+
+    pivot_pos = len(left_l)
+    devitation = abs(el_pos - pivot_pos)
+
+    if devitation == 0:
+        res = pivot
+    elif len(left_l) > len(right_l):
+        res = iter_buble(left_l, devitation, 1)
+    elif len(left_l) < len(right_l):
+        res = iter_buble(right_l, devitation, -1)
+    else:
+        res = pivot
+
+    return res
+
+
+def find_median(lst):
+    pivot = pivot_for_median(lst)
+    if (len(lst)/2 - len(lst)//2) == 0:
+        el_pos = len(lst)//2
+        median = find_el_by_pos_with_pivot(lst, pivot, el_pos)
+    else:
+        el_pos = len(lst)//2
+        r_m = find_el_by_pos_with_pivot(lst, pivot, el_pos)
+        el_pos = len(lst)//2-1
+        l_m = find_el_by_pos_with_pivot(lst, pivot, el_pos)
+        median = (r_m + l_m)/2
+    return median
+
+
 while True:
     u = input("1 - start\n0 - exit\n>>>")
     if u == "1":
         start = time.time()
         len_of_l = int(input("Enter length of list: "))
         l = []
-        left_l = []
-        right_l = []
 
-        # print("\nRandom list: ")
         for i in range(len_of_l):
             l.append(randint(0, 100))
-            # print(l[i], end=" ")
 
-        pivot = pivot_for_median(l)
+        median = find_median(l)
 
-        for el in l:
-            if el <= pivot:
-                left_l.append(el)
-            if el > pivot:
-                right_l.append(el)
-        if len(left_l)+len(right_l)+1 != len_of_l:
-            left_l.pop(left_l.index(pivot))
+        # print("Random list:")
+        # for el in l:
+        #     print(el, end=" ")
+        # print("\n")
+        print(f"My median - {median}\n")
 
-        res = 0
-        pivot_pos = len(left_l)
-        devitation = abs(len_of_l//2 - pivot_pos) ## +1
-
-        # if devitation == 0:
-        #     median = pivot
-        if len(left_l) > len(right_l):
-            median = iter_buble(left_l, devitation, 1)
-        elif len(left_l) < len(right_l):
-            median = iter_buble(right_l, devitation, -1)
-        else:
-            median = pivot
-
-        print(f"\nMy median = {median}")
-
-        # print(f"{left_l} {pivot} {right_l}")
-        # print(f"len of left = {len(left_l)} len of right = {len(right_l)}")
-        #
-        # print("\nSorted list: ")
         l.sort()
-        # for i in range(len(l)):
-        #     print(l[i], end=" ")
-        print(f"\nTrue median - {l[len(l)//2]}\n")
+        #print("Sorted list: ")
+        # for el in l:
+        #     print(el, end=" ")
+        # print("\n")
+        print(f"True median - {l[len(l)//2]}\n")
+
         end = time.time()-start
-        print(end)
+        print(f"Runtime = {end}\n")
 
     elif u == "0":
         print("idi nah")
         exit()
     else:
         print("sho vysral?")
+
 
