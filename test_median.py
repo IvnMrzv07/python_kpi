@@ -9,26 +9,51 @@ def timer(function):
         return res
     return wrapped
 
+
+# def pivot_for_median(lst):
+#     l = lst.copy()
+#     l_medians = []
+#     l_help = [0]*5
+#
+#     for i in range(0, len(l), 5):
+#         if len(l) < i+4:
+#             for j in range(i, len(l)-i):
+#                 l_help.append(l[j])
+#             if (len(l)-i)//2 == len(l)-i/2:
+#                 l_medians.append((l_help[(len(l)-i-i)//2] + l_help[(len(l)-i-i)//2-1]) /2)
+#             else:
+#                 l_medians.append(l_help[len(l)-i-i]//2)
+#         else:
+#             for j in range(5):
+#                 l_help[j] = l[i + j]
+#             l_help.sort()
+#             l_medians.append(l_help[2])
+#
+#     if len(l_medians) > 5:
+#         return pivot_for_median(l_medians)
+#     else:
+#         l_medians.sort()
+#         pivot = l_medians[len(l_medians)//2]
+#         return pivot
+
 def pivot_for_median(lst):
     l = lst.copy()
     l_medians = []
     l_help = [0]*5
-    len_of_l = len(l)
-
-    if (len_of_l - len_of_l//5*5) != 0:
-        for i in range((len_of_l//5*5+5)-len_of_l):
-            l.append(0)
 
     for i in range(0, len(l), 5):
+        if len(l) < i +4:
+            break
         for j in range(5):
             l_help[j] = l[i + j]
         l_help.sort()
         l_medians.append(l_help[2])
-
-    l_medians.sort()
-    pivot = l_medians[len(l_medians)//2]
-
-    return pivot
+    if len(l_medians) > 5:
+        return pivot_for_median(l_medians)
+    else:
+        l_medians.sort()
+        pivot = l_medians[len(l_medians)//2]
+        return pivot
 
 def iter_buble(lst, num_of_els, max_min):
     res_l = []
@@ -72,7 +97,7 @@ def find_el_by_pos_with_pivot(lst, pivot, el_pos):
     l_pivot_pos = len(left_l)
     r_pivot_pos = len(left_l) + len(pivot_l) - 1
 
-    if el_pos <= r_pivot_pos and el_pos >= l_pivot_pos:
+    if el_pos >= l_pivot_pos and el_pos <= r_pivot_pos:
         res = pivot
     elif len(left_l) > len(right_l):
         devitation = abs(el_pos - l_pivot_pos)
@@ -100,36 +125,38 @@ def find_median(lst):
 
     return median
 
-while True:
-    u = input("1 - start\n0 - exit\n>>>")
-    if u == "1":
-        len_of_l = int(input("Enter length of list: "))
-        l = []
 
-        for i in range(len_of_l):
-            l.append(randint(0, 1000000))
+if __name__ == "__main__":
+    while True:
+        u = input("1 - start\n0 - exit\n>>>")
+        if u == "1":
+            len_of_l = int(input("Enter length of list: "))
+            l = []
 
-        # print("Random list:")
-        # for el in l:
-        #     print(el, end=" ")
-        # print("\n")
-        median = find_median(l)
-        print(f"My median: {median}")
+            for i in range(len_of_l):
+                l.append(randint(0, 1000000))
 
-        l.sort()
+            # print("Random list:")
+            # for el in l:
+            #     print(el, end=" ")
+            # print("\n")
+            median = find_median(l)
+            print(f"My median: {median}")
 
-        # print("Sorted list: ")
-        # for el in l:
-        #     print(el, end=" ")
-        # print("\n")
-        if len_of_l//2 == len_of_l/2:
-            true_median = (l[len(l)//2 -1] + l[len(l)//2])/2
+            l.sort()
+
+            # print("Sorted list: ")
+            # for el in l:
+            #     print(el, end=" ")
+            # print("\n")
+            if len_of_l//2 == len_of_l/2:
+                true_median = (l[len(l)//2 -1] + l[len(l)//2])/2
+            else:
+                true_median = l[len(l)//2]
+            print(f"True median: {true_median}\n")
+
+        elif u == "0":
+            print("idi nah")
+            exit()
         else:
-            true_median = l[len(l)//2]
-        print(f"True median: {true_median}\n")
-
-    elif u == "0":
-        print("idi nah")
-        exit()
-    else:
-        print("sho vysral?")
+            print("sho vysral?")
