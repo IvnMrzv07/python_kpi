@@ -1,6 +1,14 @@
 from random import randint
 import time
 
+def timer(function):
+    def wrapped(*args):
+        start_time = time.time()
+        res = function(*args)
+        print(f"Runtime: ",time.time() - start_time)
+        return res
+    return wrapped
+
 def pivot_for_median(lst):
     l = lst.copy()
     l_medians = []
@@ -53,30 +61,32 @@ def iter_buble(lst, num_of_els, max_min):
 def find_el_by_pos_with_pivot(lst, pivot, el_pos):
     left_l = []
     right_l = []
-
+    pivot_l = []
     for el in lst:
-        if el <= pivot:
+        if el < pivot:
             left_l.append(el)
         elif el > pivot:
             right_l.append(el)
-    if len(left_l) + len(right_l) == len(lst):
-        left_l.pop(left_l.index(pivot))
+        else:
+            pivot_l.append(el)
 
-    pivot_pos = len(left_l)
-    devitation = abs(el_pos - pivot_pos)
+    l_pivot_pos = len(left_l)
+    r_pivot_pos = len(left_l) + len(pivot_l) - 1
 
-    if devitation == 0:
+    if el_pos <= r_pivot_pos and el_pos >= l_pivot_pos:
         res = pivot
     elif len(left_l) > len(right_l):
+        devitation = abs(el_pos - l_pivot_pos)
         res = iter_buble(left_l, devitation, 1)
     elif len(left_l) < len(right_l):
+        devitation = abs(el_pos - r_pivot_pos)
         res = iter_buble(right_l, devitation, -1)
     else:
         res = pivot
 
     return res
 
-
+@timer
 def find_median(lst):
     pivot = pivot_for_median(lst)
     if (len(lst)/2 - len(lst)//2) == 0:
@@ -95,12 +105,11 @@ def find_median(lst):
 while True:
     u = input("1 - start\n0 - exit\n>>>")
     if u == "1":
-        start = time.time()
         len_of_l = int(input("Enter length of list: "))
         l = []
 
         for i in range(len_of_l):
-            l.append(randint(0, 100))
+            l.append(randint(0, 1000000))
 
         median = find_median(l)
 
@@ -111,6 +120,7 @@ while True:
         print(f"My median - {median}\n")
 
         l.sort()
+
         # print("Sorted list: ")
         # for el in l:
         #     print(el, end=" ")
@@ -121,9 +131,6 @@ while True:
         else:
             true_median = l[len(l)//2]
         print(f"True median - {true_median}\n")
-
-        end = time.time()-start
-        print(f"Runtime = {end}\n")
 
     elif u == "0":
         print("idi nah")
