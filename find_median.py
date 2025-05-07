@@ -81,13 +81,14 @@ def find_median(lst):
     pivot = pivot_for_median(lst)
     if (len(lst)/2 - len(lst)//2) == 0:
         el_pos = len(lst)//2
-        median = find_el_by_pos_with_pivot(lst, pivot, el_pos)
-    else:
-        el_pos = len(lst)//2
         r_m = find_el_by_pos_with_pivot(lst, pivot, el_pos)
         el_pos = len(lst)//2-1
         l_m = find_el_by_pos_with_pivot(lst, pivot, el_pos)
         median = (r_m + l_m)/2
+    else:
+        el_pos = len(lst)//2
+        median = find_el_by_pos_with_pivot(lst, pivot, el_pos)
+
     return median
 
 
@@ -110,11 +111,16 @@ while True:
         print(f"My median - {median}\n")
 
         l.sort()
-        #print("Sorted list: ")
+        # print("Sorted list: ")
         # for el in l:
         #     print(el, end=" ")
         # print("\n")
-        print(f"True median - {l[len(l)//2]}\n")
+
+        if len_of_l//2 == len_of_l/2:
+            true_median = (l[len(l)//2 -1] + l[len(l)//2])/2
+        else:
+            true_median = l[len(l)//2]
+        print(f"True median - {true_median}\n")
 
         end = time.time()-start
         print(f"Runtime = {end}\n")
